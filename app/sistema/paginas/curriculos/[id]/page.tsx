@@ -1,22 +1,32 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Header from "../../../../componentes/header";
 import Footer from "../../../../componentes/footer";
 import { findCurriculo, loadCurriculos, saveCurriculos } from "../data";
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default function CurriculoDetalhesPage({ params }: PageProps) {
+export default function CurriculoDetalhesPage() {
+  const [curriculo, setCurriculo] = useState(() => null as null | ReturnType<typeof findCurriculo>);
+  const [isLoading, setIsLoading] = useState(true);
+  const params = useParams();
   const router = useRouter();
-  const curriculo = findCurriculo(params.id) ?? null;
+  const curriculoId = Array.isArray(params.id) ? params.id[0] : params.id;
+
+  useEffect(() => {
+    if (!curriculoId) {
+      setCurriculo(null);
+      setIsLoading(false);
+      return;
+    }
+
+    const foundCurriculo = findCurriculo(curriculoId) ?? null;
+    setCurriculo(foundCurriculo);
+    setIsLoading(false);
+  }, [curriculoId]);
 
   const handleDelete = () => {
     if (!curriculo) return;
@@ -53,7 +63,11 @@ export default function CurriculoDetalhesPage({ params }: PageProps) {
           </div>
         </div>
 
-        {curriculo ? (
+        {isLoading ? (
+          <div className="rounded-[28px] border border-dashed border-zinc-300 bg-white p-10 text-center text-zinc-600 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
+            Carregando currículo...
+          </div>
+        ) : curriculo ? (
           <section className="space-y-8 rounded-[28px] border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="flex items-center gap-4">
