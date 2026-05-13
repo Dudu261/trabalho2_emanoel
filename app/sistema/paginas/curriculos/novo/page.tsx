@@ -4,13 +4,14 @@ import Image from "next/image";
 import { useState, type ChangeEvent } from "react";
 import { Controller, FieldErrors, Resolver, SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IMaskInput } from "react-imask";
+import ReactInputMask from "react-input-mask";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Header from "../../../../componentes/header";
 import Footer from "../../../../componentes/footer";
 import { Button } from "../../../../componentes/ui/button";
+import { Textarea } from "../../../../componentes/ui/textarea";
 import { Curriculo, Formacao, Experiencia, loadCurriculos, saveCurriculos } from "../data";
 import * as yup from "yup";
 
@@ -212,9 +213,9 @@ export default function NovoCurriculoPage() {
                 name="telefone"
                 control={control}
                 render={({ field }) => (
-                  <IMaskInput
+                  <ReactInputMask
                     {...field}
-                    mask="(00) 00000-0000"
+                    mask="(99) 99999-9999"
                     placeholder="(99) 99999-9999"
                     className="w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-200 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
                   />
@@ -228,9 +229,9 @@ export default function NovoCurriculoPage() {
                 name="cpf"
                 control={control}
                 render={({ field }) => (
-                  <IMaskInput
+                  <ReactInputMask
                     {...field}
-                    mask="000.000.000-00"
+                    mask="999.999.999-99"
                     placeholder="000.000.000-00"
                     className="w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-200 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
                   />
@@ -242,11 +243,10 @@ export default function NovoCurriculoPage() {
 
           <div>
             <label className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Resumo profissional</label>
-            <textarea
+            <Textarea
               {...register("resumo")}
-              rows={5}
               placeholder="Descreva a experiência e principais competências"
-              className="w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-200 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
+              className="bg-zinc-50 dark:bg-zinc-950"
             />
             {errors.resumo && <p className="mt-2 text-sm text-red-600">{errors.resumo.message?.toString()}</p>}
           </div>
@@ -344,11 +344,10 @@ export default function NovoCurriculoPage() {
                     </div>
                     <div>
                       <label className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Descrição</label>
-                      <textarea
+                      <Textarea
                         {...register(`experiencias.${index}.descricao` as const)}
-                        rows={3}
-                        className="w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-200 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
                         placeholder="Descreva sua responsabilidade e resultados"
+                        className="bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
                   </div>
