@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState, type ChangeEvent } from "react";
 import { Controller, FieldErrors, Resolver, SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ReactInputMask from "react-input-mask";
+import { IMaskInput } from 'react-imask';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -213,9 +213,9 @@ export default function NovoCurriculoPage() {
                 name="telefone"
                 control={control}
                 render={({ field }) => (
-                  <ReactInputMask
+                  <IMaskInput
                     {...field}
-                    mask="(99) 99999-9999"
+                    mask="(00) 00000-0000"
                     placeholder="(99) 99999-9999"
                     className="w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-200 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
                   />
@@ -229,9 +229,9 @@ export default function NovoCurriculoPage() {
                 name="cpf"
                 control={control}
                 render={({ field }) => (
-                  <ReactInputMask
+                  <IMaskInput
                     {...field}
-                    mask="999.999.999-99"
+                    mask="000.000.000-00"
                     placeholder="000.000.000-00"
                     className="w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-200 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
                   />
