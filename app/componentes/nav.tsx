@@ -13,7 +13,7 @@ export default function Nav() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex flex-wrap items-center gap-3 text-sm font-medium text-zinc-700 dark:text-zinc-200">
+    <nav className="flex flex-wrap items-center gap-2 text-sm font-medium">
       {links.map((link) => {
         const isActive =
           pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
@@ -24,8 +24,8 @@ export default function Nav() {
             href={link.href}
             className={`rounded-full px-4 py-2 transition ${
               isActive
-                ? "bg-sky-600 text-white"
-                : "text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800"
+                ? "bg-amber-400 text-slate-950 shadow-lg shadow-amber-500/20"
+                : "border border-white/8 bg-white/5 text-slate-200 hover:border-amber-300/40 hover:bg-white/10 hover:text-white"
             }`}
             aria-current={isActive ? "page" : undefined}
           >

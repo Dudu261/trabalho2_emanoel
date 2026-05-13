@@ -5,7 +5,7 @@ import Link from "next/link";
 import Header from "../../../componentes/header";
 import Footer from "../../../componentes/footer";
 import { Curriculo, loadCurriculos } from "./data";
-import { FiSearch } from "react-icons/fi";
+import { FiArrowRight, FiSearch } from "react-icons/fi";
 
 export default function CurriculosPage() {
   const [curriculos] = useState<Curriculo[]>(() => loadCurriculos());
@@ -34,67 +34,97 @@ export default function CurriculosPage() {
   );
 
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-white">
+    <div className="flex min-h-screen flex-col text-slate-50">
       <Header />
-      <main className="mx-auto max-w-6xl px-6 py-12 sm:px-8">
-        <div className="mb-8 flex flex-col gap-4 rounded-[28px] border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-sm uppercase tracking-[0.2em] text-sky-600">Currículos</p>
-            <h1 className="mt-2 text-3xl font-semibold">Lista de currículos</h1>
-            <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-              Busque por nome ou cargo e veja currículos armazenados no localStorage.
-            </p>
-          </div>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <div className="relative w-full sm:w-auto">
-              <FiSearch className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-              <input
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Buscar por nome ou cargo"
-                className="w-full rounded-full border border-zinc-200 bg-zinc-100 py-3 pl-11 pr-4 text-sm text-zinc-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-200 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
-              />
-            </div>
-            <Link
-              href="/sistema/paginas/curriculos/novo"
-              className="rounded-full bg-sky-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-700"
-            >
-              Cadastrar novo
-            </Link>
-          </div>
-        </div>
 
-        <div className="grid gap-6">
-          {filteredCurriculos.length === 0 ? (
-            <div className="rounded-[28px] border border-dashed border-zinc-300 bg-white p-10 text-center text-zinc-600 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
-              Nenhum currículo encontrado. Tente outro termo de pesquisa.
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
+        <section className="glass-panel overflow-hidden rounded-[2rem] px-6 py-6 sm:px-8 sm:py-8">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl space-y-4">
+              <span className="section-kicker">Currículos</span>
+              <h1 className="section-title">Galeria de perfis cadastrados</h1>
+              <p className="max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
+                A mesma lista continua disponível, agora apresentada como uma vitrine mais editorial,
+                com busca destacada e cartões de leitura mais elegante.
+              </p>
             </div>
-          ) : (
-            filteredCurriculos.map((item) => (
-              <article
-                key={item.id}
-                className="rounded-[28px] border border-zinc-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-sky-300 dark:border-zinc-800 dark:bg-zinc-900"
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <label className="relative w-full min-w-[280px] sm:w-[340px]">
+                <FiSearch className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <input
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Buscar por nome ou cargo"
+                  className="field-shell w-full pl-11 pr-4"
+                />
+              </label>
+
+              <Link
+                href="/sistema/paginas/curriculos/novo"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-slate-950/20 transition hover:-translate-y-0.5"
               >
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                  <div className="space-y-2">
-                    <h2 className="text-xl font-semibold text-zinc-950 dark:text-white">{item.nome}</h2>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400">{item.cargo}</p>
-                    <p className="max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-                      {item.resumo}
-                    </p>
+                Cadastrar novo
+                <FiArrowRight />
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            <div className="glass-card rounded-[1.5rem] p-4">
+              <p className="text-xs uppercase tracking-[0.22em] text-amber-200/80">Total visível</p>
+              <p className="mt-3 text-3xl font-semibold">{filteredCurriculos.length}</p>
+            </div>
+            <div className="glass-card rounded-[1.5rem] p-4">
+              <p className="text-xs uppercase tracking-[0.22em] text-amber-200/80">Origem</p>
+              <p className="mt-3 text-lg font-semibold">LocalStorage</p>
+            </div>
+            <div className="glass-card rounded-[1.5rem] p-4">
+              <p className="text-xs uppercase tracking-[0.22em] text-amber-200/80">Filtro</p>
+              <p className="mt-3 text-lg font-semibold">Nome e cargo</p>
+            </div>
+          </div>
+
+          <div className="mt-8 grid gap-5">
+            {filteredCurriculos.length === 0 ? (
+              <div className="glass-card rounded-[1.75rem] border-dashed p-10 text-center text-slate-300">
+                Nenhum currículo encontrado. Tente outro termo de pesquisa.
+              </div>
+            ) : (
+              filteredCurriculos.map((item) => (
+                <article
+                  key={item.id}
+                  className="glass-card rounded-[1.75rem] p-5 transition duration-300 hover:-translate-y-1 hover:border-amber-300/30"
+                >
+                  <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap gap-2">
+                        <span className="badge-chip">{item.cargo}</span>
+                        <span className="badge-chip">{item.email}</span>
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-semibold tracking-tight text-white">{item.nome}</h2>
+                        <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-300">
+                          {item.resumo}
+                        </p>
+                      </div>
+                    </div>
+
+                    <Link
+                      href={`/sistema/paginas/curriculos/${item.id}`}
+                      className="inline-flex items-center justify-center gap-2 self-start rounded-full border border-amber-300/30 bg-amber-400/10 px-4 py-2 text-sm font-semibold text-amber-100 transition hover:bg-amber-400/20"
+                    >
+                      Ver detalhes
+                      <FiArrowRight />
+                    </Link>
                   </div>
-                  <Link
-                    href={`/sistema/paginas/curriculos/${item.id}`}
-                    className="inline-flex items-center rounded-full border border-sky-600 px-4 py-2 text-sm font-semibold text-sky-600 transition hover:bg-sky-50"
-                  >
-                    Ver detalhes
-                  </Link>
-                </div>
-              </article>
-            ))
-          )}
-        </div>
+                </article>
+              ))
+            )}
+          </div>
+        </section>
       </main>
+
       <Footer />
     </div>
   );

@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import Header from "../../../../componentes/header";
 import Footer from "../../../../componentes/footer";
 import { findCurriculo, loadCurriculos, saveCurriculos } from "../data";
+import { FiBriefcase, FiMail, FiMapPin, FiTrash2 } from "react-icons/fi";
 
 export default function CurriculoDetalhesPage() {
   const [curriculo, setCurriculo] = useState(() => null as null | ReturnType<typeof findCurriculo>);
@@ -17,15 +18,19 @@ export default function CurriculoDetalhesPage() {
   const curriculoId = Array.isArray(params.id) ? params.id[0] : params.id;
 
   useEffect(() => {
-    if (!curriculoId) {
-      setCurriculo(null);
-      setIsLoading(false);
-      return;
-    }
+    const timer = setTimeout(() => {
+      if (!curriculoId) {
+        setCurriculo(null);
+        setIsLoading(false);
+        return;
+      }
 
-    const foundCurriculo = findCurriculo(curriculoId) ?? null;
-    setCurriculo(foundCurriculo);
-    setIsLoading(false);
+      const foundCurriculo = findCurriculo(curriculoId) ?? null;
+      setCurriculo(foundCurriculo);
+      setIsLoading(false);
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [curriculoId]);
 
   const handleDelete = () => {
@@ -38,109 +43,146 @@ export default function CurriculoDetalhesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-white">
+    <div className="flex min-h-screen flex-col text-slate-50">
       <Header />
-      <main className="mx-auto max-w-5xl px-6 py-12 sm:px-8">
-        <div className="mb-8 flex flex-col gap-4 rounded-[28px] border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-sm uppercase tracking-[0.2em] text-sky-600">Detalhes do currículo</p>
-            <h1 className="mt-2 text-3xl font-semibold">Detalhes do candidato</h1>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/sistema/paginas/curriculos"
-              className="rounded-full border border-zinc-300 bg-white px-5 py-3 text-zinc-700 transition hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
-            >
-              Voltar à lista
-            </Link>
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="rounded-full bg-red-600 px-5 py-3 text-white transition hover:bg-red-700"
-            >
-              Excluir currículo
-            </button>
-          </div>
-        </div>
 
-        {isLoading ? (
-          <div className="rounded-[28px] border border-dashed border-zinc-300 bg-white p-10 text-center text-zinc-600 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
-            Carregando currículo...
-          </div>
-        ) : curriculo ? (
-          <section className="space-y-8 rounded-[28px] border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex items-center gap-4">
-                <div className="h-20 w-20 overflow-hidden rounded-3xl bg-zinc-100 dark:bg-zinc-800">
-                  <Image src={curriculo.avatar} alt={curriculo.nome} width={80} height={80} className="h-full w-full object-cover" />
-                </div>
-                <div>
-                  <p className="text-sm uppercase tracking-[0.2em] text-sky-600">{curriculo.cargo}</p>
-                  <h2 className="mt-2 text-2xl font-semibold text-zinc-950 dark:text-white">{curriculo.nome}</h2>
-                </div>
-              </div>
-              <div className="rounded-full bg-zinc-100 px-4 py-2 text-sm text-zinc-700 dark:bg-zinc-950 dark:text-zinc-300">
-                {curriculo.email}
-              </div>
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
+        <section className="glass-panel rounded-[2rem] px-6 py-6 sm:px-8 sm:py-8">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl space-y-4">
+              <span className="section-kicker">Detalhes do currículo</span>
+              <h1 className="section-title">Detalhe completo do candidato</h1>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-2">
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold">Telefone</h3>
-                  <p className="text-zinc-600 dark:text-zinc-300">{curriculo.telefone}</p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold">CPF</h3>
-                  <p className="text-zinc-600 dark:text-zinc-300">{curriculo.cpf}</p>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold">Resumo profissional</h3>
-                <p className="mt-2 text-zinc-600 dark:text-zinc-300">{curriculo.resumo}</p>
-              </div>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/sistema/paginas/curriculos"
+                className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:border-amber-300/40 hover:bg-white/10"
+              >
+                Voltar à lista
+              </Link>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-rose-400/40 bg-rose-500/10 px-5 py-3 text-sm font-semibold text-rose-100 transition hover:bg-rose-500/20"
+              >
+                <FiTrash2 />
+                Excluir currículo
+              </button>
             </div>
+          </div>
 
-            <div className="grid gap-6 lg:grid-cols-2">
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold">Experiências profissionais</h3>
-                {curriculo.experiencias.map((item, index) => (
-                  <div key={index} className="rounded-3xl border border-zinc-200 p-4 dark:border-zinc-800">
-                    <p className="font-semibold text-zinc-950 dark:text-white">{item.empresa}</p>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400">{item.cargo} • {item.periodo}</p>
-                    <p className="mt-2 text-zinc-600 dark:text-zinc-300">{item.descricao}</p>
+          {isLoading ? (
+            <div className="glass-card mt-8 rounded-[1.75rem] p-10 text-center text-slate-300">
+              Carregando currículo...
+            </div>
+          ) : curriculo ? (
+            <section className="mt-8 space-y-8">
+              <div className="glass-card rounded-[1.75rem] p-5 sm:p-6">
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="relative h-24 w-24 overflow-hidden rounded-[1.8rem] border border-white/10 bg-slate-900">
+                      <Image
+                        src={curriculo.avatar}
+                        alt={curriculo.nome}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div>
+                      <p className="section-kicker">{curriculo.cargo}</p>
+                      <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white">{curriculo.nome}</h2>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <span className="badge-chip inline-flex items-center gap-2">
+                          <FiMail />
+                          {curriculo.email}
+                        </span>
+                        <span className="badge-chip inline-flex items-center gap-2">
+                          <FiBriefcase />
+                          {curriculo.cargo}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                ))}
-              </div>
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold">Formação acadêmica</h3>
-                {curriculo.formacoes.map((item, index) => (
-                  <div key={index} className="rounded-3xl border border-zinc-200 p-4 dark:border-zinc-800">
-                    <p className="font-semibold text-zinc-950 dark:text-white">{item.instituicao}</p>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400">{item.curso}</p>
-                    <p className="mt-2 text-zinc-600 dark:text-zinc-300">{item.periodo}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
 
-            <div>
-              <h3 className="text-xl font-semibold">Habilidades</h3>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {curriculo.habilidades.map((skill) => (
-                  <span key={skill} className="rounded-full bg-sky-100 px-4 py-2 text-sm text-sky-700 dark:bg-sky-900/30 dark:text-sky-200">
-                    {skill}
-                  </span>
-                ))}
+                  <div className="glass-card rounded-[1.4rem] px-4 py-3 text-sm text-slate-300">
+                    ID do registro: <span className="text-slate-100">{curriculo.id}</span>
+                  </div>
+                </div>
               </div>
+
+              <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+                <div className="glass-card rounded-[1.75rem] p-5 sm:p-6">
+                  <h3 className="text-xl font-semibold">Contato e resumo</h3>
+                  <div className="mt-5 space-y-4">
+                    <div className="rounded-[1.35rem] border border-white/8 bg-slate-950/65 p-4">
+                      <p className="flex items-center gap-2 text-sm font-semibold text-amber-200">
+                        <FiMapPin /> Telefone
+                      </p>
+                      <p className="mt-2 text-slate-300">{curriculo.telefone}</p>
+                    </div>
+                    <div className="rounded-[1.35rem] border border-white/8 bg-slate-950/65 p-4">
+                      <p className="text-sm font-semibold text-amber-200">CPF</p>
+                      <p className="mt-2 text-slate-300">{curriculo.cpf}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="glass-card rounded-[1.75rem] p-5 sm:p-6">
+                  <h3 className="text-xl font-semibold">Resumo profissional</h3>
+                  <p className="mt-5 leading-8 text-slate-300">{curriculo.resumo}</p>
+                </div>
+              </div>
+
+              <div className="grid gap-6 lg:grid-cols-2">
+                <div className="glass-card rounded-[1.75rem] p-5 sm:p-6">
+                  <h3 className="text-xl font-semibold">Experiências profissionais</h3>
+                  <div className="mt-5 space-y-4">
+                    {curriculo.experiencias.map((item, index) => (
+                      <div key={index} className="rounded-[1.35rem] border border-white/8 bg-slate-950/65 p-4">
+                        <p className="font-semibold text-white">{item.empresa}</p>
+                        <p className="mt-1 text-sm text-slate-400">
+                          {item.cargo} • {item.periodo}
+                        </p>
+                        <p className="mt-3 leading-7 text-slate-300">{item.descricao}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="glass-card rounded-[1.75rem] p-5 sm:p-6">
+                  <h3 className="text-xl font-semibold">Formação acadêmica</h3>
+                  <div className="mt-5 space-y-4">
+                    {curriculo.formacoes.map((item, index) => (
+                      <div key={index} className="rounded-[1.35rem] border border-white/8 bg-slate-950/65 p-4">
+                        <p className="font-semibold text-white">{item.instituicao}</p>
+                        <p className="mt-1 text-sm text-slate-400">{item.curso}</p>
+                        <p className="mt-3 text-slate-300">{item.periodo}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="glass-card rounded-[1.75rem] p-5 sm:p-6">
+                <h3 className="text-xl font-semibold">Habilidades</h3>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {curriculo.habilidades.map((skill) => (
+                    <span key={skill} className="badge-chip">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </section>
+          ) : (
+            <div className="glass-card mt-8 rounded-[1.75rem] p-10 text-center text-slate-300">
+              Currículo não encontrado. Verifique se o ID está correto.
             </div>
-          </section>
-        ) : (
-          <div className="rounded-[28px] border border-dashed border-zinc-300 bg-white p-10 text-center text-zinc-600 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
-            Currículo não encontrado. Verifique se o ID está correto.
-          </div>
-        )}
+          )}
+        </section>
       </main>
+
       <Footer />
     </div>
   );

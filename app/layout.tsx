@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sistema de Currículos",
-  description: "Aplicação de currículos construída com Next.js, Tailwind e validação de formulários.",
+  title: "Nexa Currículos",
+  description: "Plataforma de currículos com visual editorial e experiência de cadastro e consulta.",
 };
 
 export default function RootLayout({
@@ -28,7 +28,7 @@ export default function RootLayout({
       lang="pt-BR"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body suppressHydrationWarning={true} className="min-h-full bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-white">
+      <body suppressHydrationWarning={true} className="shell-grid min-h-full text-slate-50 antialiased">
         {children}
         <AppToaster />
       </body>

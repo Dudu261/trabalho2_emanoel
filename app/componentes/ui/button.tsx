@@ -10,17 +10,26 @@ function buttonClassName(disabled?: boolean, className?: string) {
     "py-3",
     "text-sm",
     "font-semibold",
-    "transition-colors",
+    "transition-all",
     "focus-visible:outline-none",
     "focus-visible:ring-2",
-    "focus-visible:ring-sky-500",
+    "focus-visible:ring-amber-400/60",
     "disabled:cursor-not-allowed",
     "disabled:opacity-60",
+    "shadow-lg",
   ];
 
   const color = disabled
-    ? ["bg-slate-300", "text-slate-700"]
-    : ["bg-sky-600", "text-white", "hover:bg-sky-700"];
+    ? ["bg-slate-700", "text-slate-300"]
+    : [
+        "bg-gradient-to-r",
+        "from-amber-400",
+        "via-orange-500",
+        "to-rose-500",
+        "text-slate-950",
+        "hover:-translate-y-0.5",
+        "hover:shadow-amber-500/25",
+      ];
 
   return [...base, ...color, className ?? ""].join(" ").trim();
 }
