@@ -4,13 +4,17 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Header from "../../../componentes/header";
 import Footer from "../../../componentes/footer";
-import { Curriculo, loadCurriculos } from "./data";
+import { Curriculo, initialCurriculos, loadCurriculos } from "./data";
 import { FiArrowRight, FiSearch } from "react-icons/fi";
 
 export default function CurriculosPage() {
-  const [curriculos] = useState<Curriculo[]>(() => loadCurriculos());
+  const [curriculos, setCurriculos] = useState<Curriculo[]>(initialCurriculos);
   const [query, setQuery] = useState("");
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    setCurriculos(loadCurriculos());
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {

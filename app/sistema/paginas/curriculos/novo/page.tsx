@@ -11,7 +11,7 @@ import {
   useForm,
 } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IMaskInput } from "react-imask";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -88,6 +88,32 @@ const defaultValues: FormValues = {
   formacoes: [{ instituicao: "", curso: "", periodo: "" }],
 };
 
+const avatarPlaceholders = ["/next.svg", "/vercel.svg", "/file.svg", "/globe.svg", "/window.svg"];
+
+function formatPhone(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, 11);
+  if (digits.length <= 2) return digits ? `(${digits}` : "";
+  if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+}
+
+function formatCPF(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, 11);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `${digits.slice(0, 3)}.${digits.slice(3)}`;
+  if (digits.length <= 9) return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6)}`;
+  return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`;
+}
+
+function chooseAvatarPlaceholder(fileName: string | undefined | null) {
+  if (!fileName) return avatarPlaceholders[0];
+  let hash = 0;
+  for (const char of fileName) {
+    hash = (hash + char.charCodeAt(0)) % avatarPlaceholders.length;
+  }
+  return avatarPlaceholders[hash];
+}
+
 function extractErrorMessage(errors: FieldErrors<FormValues>): string {
   if (!errors) return "Erro na validação.";
   const error = Object.values(errors)[0];
@@ -122,8 +148,7 @@ export default function NovoCurriculoPage() {
     setValue("avatar", files);
 
     if (files && files.length > 0) {
-      const url = URL.createObjectURL(files[0]);
-      setPreview(url);
+      setPreview(chooseAvatarPlaceholder(files[0].name));
     } else {
       setPreview("/next.svg");
     }
@@ -146,7 +171,7 @@ export default function NovoCurriculoPage() {
       experiencias: data.experiencias,
       formacoes: data.formacoes,
       habilidades: skills,
-      avatar: preview || "/next.svg",
+      avatar: data.avatar && data.avatar.length > 0 ? chooseAvatarPlaceholder(data.avatar[0]?.name) : preview || "/next.svg",
     };
 
     saveCurriculos([novo, ...loadCurriculos()]);
@@ -236,9 +261,10 @@ export default function NovoCurriculoPage() {
                       name="telefone"
                       control={control}
                       render={({ field }) => (
-                        <IMaskInput
+                        <input
                           {...field}
-                          mask="(00) 00000-0000"
+                          value={field.value ?? ""}
+                          onChange={(event) => field.onChange(formatPhone(event.target.value))}
                           placeholder="(99) 99999-9999"
                           className="field-shell w-full px-4 py-3"
                         />
@@ -253,9 +279,10 @@ export default function NovoCurriculoPage() {
                       name="cpf"
                       control={control}
                       render={({ field }) => (
-                        <IMaskInput
+                        <input
                           {...field}
-                          mask="000.000.000-00"
+                          value={field.value ?? ""}
+                          onChange={(event) => field.onChange(formatCPF(event.target.value))}
                           placeholder="000.000.000-00"
                           className="field-shell w-full px-4 py-3"
                         />
