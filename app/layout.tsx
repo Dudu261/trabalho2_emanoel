@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import AppToaster from "./componentes/toaster";
 
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body suppressHydrationWarning={true} className="shell-grid min-h-full text-slate-50 antialiased">
         {children}
         <AppToaster />
+        <Analytics />
       </body>
     </html>
   );
